@@ -165,6 +165,20 @@ boost_hana_add_executable(${github_75} EXCLUDE_FROM_ALL
                     "bugs/github_75.cpp" "bugs/github_75_other_tu.cpp")
 boost_hana_add_unit_test(${github_75} ${CMAKE_CURRENT_BINARY_DIR}/${github_75})
 
+##############################################################################
+# Check Standard Library 
+##############################################################################
+if(BOOST_HANA_STDLIB_WARNING)
+    foreach(_file IN LISTS BOOST_HANA_TEST_SOURCES)
+        file(APPEND ${_file} "#if defined (__GLIBCXX__) 
+                              #warning \"Building with GNU stdlibc++\"
+                              #endif
+                              #if defined(_LIBCPP_VERSION)
+                              #warning \"Building with LLVM libc++\"
+                              #endif
+           ")
+    endforeach()
+endif()
 
 ##############################################################################
 # Add all the unit tests
